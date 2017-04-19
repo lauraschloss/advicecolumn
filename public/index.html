@@ -98,11 +98,12 @@ socket.on('message', function(data){
     addHelp(data.title, data.helptext);
   }
 });
-// socket.on('initialize', function(messages){
-//   for (var i = 0; i < messages.length; i++){
-//     addChat(messages[i].username, messages[i].message);
-//   }
-// })
+socket.on('initialize', function(alldata){
+  for (var i = 0; i < alldata.messages.length; i++){
+    addChat(alldata.messages[i].message);
+  }
+  addHelp(alldata.title, alldata.helptext);
+})
 function addChat(message) {
   var chat = $('<div class="chat"></div>');
   var userSpan = $('<span class="username"></span>');

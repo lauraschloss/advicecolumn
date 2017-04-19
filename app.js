@@ -7,14 +7,24 @@ app.use(express.static('public'));
 
 server.listen(process.env.PORT || 3000);
 
-var messages = [];
+var alldata = {
+	messages: [],
+	helptext: '',
+	title: ''
+}
 
 io.on('connection', function(client){
   console.log('A user connected!');
-  client.emit('initialize', messages);
+  client.emit('initialize', alldata);
   client.on('message', function(data){
     console.log('message recieved', data);
-    messages.push(data);
+    if (data.message) {
+	    alldata.messages.push(data);
+	} else if (data.title) {
+		alldata.messages = [];
+		alldata.title = data.title;
+		alldata.helptext = data.helptext;
+	}
     client.broadcast.emit('message', data);
   })
 });
